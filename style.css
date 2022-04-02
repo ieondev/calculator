@@ -1,5 +1,11 @@
-header{
-  margin: 100px;
+body {
+  margin: 0;
+  background-color: #111111;
+}
+
+h1{
+  font-family: monospace;
+  color: lightsteelblue;
 }
 
 button {
@@ -8,7 +14,12 @@ button {
   margin: 2px;
   padding: 10px;
   background-color: lightsteelblue;
+  font-family: monospace;
   border-radius: 5px;
+}
+
+.previousNumber {
+  color: gray;
 }
 
 #container {
@@ -18,13 +29,12 @@ button {
 
 #display {
   height: 28px;
-  width: 124px;
-  border: 1px solid gray;
-  border-radius: 10px;
+  width: 126px;
   font-family: monospace;
   color: black;
   text-align: right;
   padding: 5px;
+  background-color: lightsteelblue;
 }
 
 #line1 {

@@ -1,100 +1,142 @@
-const add = function(a, b) {
-  return (a + b);
+let currentNum = "";
+let previousNum = "";
+let operator = "";
+
+const currentDisplayNumber = document.querySelector('.currentNumber');
+const previousDisplayNumber = document.querySelector('.previousNumber');
+
+window.addEventListener('keydown', handleKeyPress);
+
+const equal = document.querySelector('.equal');
+equal.addEventListener("click",() => {
+  if (currentNum != "" && previousNum != ""){
+    operate();
+  }
+});
+
+const clear = document.querySelector('.clear');
+clear.addEventListener("click", clearCalculator);
+
+const decimal = document.querySelector('.decimal');
+decimal.addEventListener("click", () => {
+  addDecimal();
+});
+
+const numberButtons = document.querySelectorAll('.number');
+const operators = document.querySelectorAll('.operator');
+
+numberButtons.forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    handleNumber(e.target.textContent);
+  })
+});
+
+function handleNumber(number) {
+  if (previousNum != "" && currentNum != "" && operator === "") {
+    previousNum = "";
+    currentDisplayNumber.textContent = currentNum;
+  }
+  if (currentNum.length < 12) {
+    currentNum += number;
+    currentDisplayNumber.textContent = currentNum;
+  }
 }
 
-const substract = function(a, b) {
-  selectOperator(a - b);
-  return(a - b);
+operators.forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    handleOperator(e.target.textContent);
+  })
+});
+
+function handleOperator(op) {
+  if (previousNum === "") {
+    previousNum = currentNum;
+    operatorCheck(op);
+  } else if (currentNum === "") {
+    operatorCheck(op);
+  } else{
+    operate();
+    operator = op;
+    currentDisplayNumber.textContent = "";
+    previousDisplayNumber.textContent = previousNum + " " + operator;
+  }
 }
 
-const multiply = function(a, b) {
-  selectOperator(a * b);
-  return(a * b);
+function operatorCheck(text) {
+  operator = text;
+  if (previousNum.length < 12) {
+    previousDisplayNumber.textContent = previousNum + " " + operator;
+  } else {
+    previousDisplayNumber.textContent= previousNum.slice(0, 11); + " " + operator;
+  }
+  currentNum = "";
+  currentDisplayNumber.textContent = "";
 }
 
-const divide = function(a, b) {
-  selectOperator(a / b);
-  return(a / b);
+function operate() {
+  previousNum = Number(previousNum);
+  currentNum = Number(currentNum);
+
+  switch (operator) {
+    case "+":
+      previousNum += currentNum;
+      break;
+    case "-":
+      previousNum -= currentNum;
+      break;
+    case "*":
+      previousNum *= currentNum;
+      break;
+    case "/":
+      previousNum /= currentNum;
+      if (currentNum <= 0) {
+        previousNum = "ERROR"
+        displayResults();
+        return;
+      }
+      break;
+    default:
+      break;
+  }
+  previousNum = previousNum.toString();
+  displayResults();
 }
 
-const operate = function(a, b, op) {
-  document.getElementById("equals").addEventListener("click", function(){
-    console.log(a, b, op);
-    switch (op) {
-      case "plus":
-        display(add(a, b));
-        saveNum(add(a, b));
-        break;
-
-      case "minus":
-        display(substract(a, b));
-        saveNum(substract(a, b));
-        break;
-
-      case "times":
-        display(multiply(a, b));
-        saveNum(multiply(a, b));
-        break;
-
-      case "over":
-        display(divide(a, b));
-        saveNum(divide(a, b));
-        break;
-      
-      default:
-        break;
-    }
-  }, { once: true });
+function displayResults() {
+  if (previousNum.length < 12) {
+    currentDisplayNumber.textContent = previousNum;
+  } else {
+    currentDisplayNumber.textContent = previousNum.slice(0, 11);
+  }
+  previousDisplayNumber.textContent = "";
+  operator = "";
+  currentNum = "";
 }
 
-const saveNum = function(num) {
-  display(num);
-  selectOperator(num);
+function clearCalculator () {
+  currentNum = "";
+  previousNum = "";
+  operator = "";
+  previousDisplayNumber.textContent = "";
+  currentDisplayNumber.textContent = "";
 }
 
-const display = function(text) {
-  document.getElementById("display").innerHTML = text;
-};
-
-const clear = function() {
-  display("");
-  init();
-};
-
-const selectOperator = function(num) {
-  document.getElementById("add").addEventListener("click", function(){nextNum(num, "plus");});
-  document.getElementById("substract").addEventListener("click", function(){nextNum(num, "minus");});
-  document.getElementById("multiply").addEventListener("click", function(){nextNum(num, "times");});
-  document.getElementById("divide").addEventListener("click", function(){nextNum(num, "over");});
+function addDecimal() {
+  if (!currentNum.includes('.')) {
+    currentNum += ".";
+    currentDisplayNumber.textContent = currentNum;
+  }
 }
 
-const nextNum = function(num, operator) {
-  document.getElementById("1").addEventListener("click", function(){operate(num, 1, operator);});
-  document.getElementById("2").addEventListener("click", function(){operate(num, 2, operator);});
-  document.getElementById("3").addEventListener("click", function(){operate(num, 3, operator);});
-  document.getElementById("4").addEventListener("click", function(){operate(num, 4, operator);});
-  document.getElementById("5").addEventListener("click", function(){operate(num, 5, operator);});
-  document.getElementById("6").addEventListener("click", function(){operate(num, 6, operator);});
-  document.getElementById("7").addEventListener("click", function(){operate(num, 7, operator);});
-  document.getElementById("8").addEventListener("click", function(){operate(num, 8, operator);});
-  document.getElementById("9").addEventListener("click", function(){operate(num, 9, operator);});
-  document.getElementById("0").addEventListener("click", function(){operate(num, 0, operator);});
+function handleKeyPress(e) {
+  e.preventDefault();
+  if (e.key >= 0 && e.key <= 9) {
+    handleNumber(e.key);
+  } else if (e.key === "+" || e.key === "-" || e.key === "/" || e.key === "*") {
+    handleOperator(e.key);
+  } else if (e.key === ".") {
+    addDecimal();
+  } else if (e.key === "Enter" || e.key === "=" && currentNum != "" && previousNum != "") {
+    operate();
+  }
 }
-
-const init = function() {
-  document.getElementById("1").addEventListener("click", function(){saveNum(1);});
-  document.getElementById("2").addEventListener("click", function(){saveNum(2);});
-  document.getElementById("3").addEventListener("click", function(){saveNum(3);});
-  document.getElementById("4").addEventListener("click", function(){saveNum(4);});
-  document.getElementById("5").addEventListener("click", function(){saveNum(5);});
-  document.getElementById("6").addEventListener("click", function(){saveNum(6);});
-  document.getElementById("7").addEventListener("click", function(){saveNum(7);});
-  document.getElementById("8").addEventListener("click", function(){saveNum(8);});
-  document.getElementById("9").addEventListener("click", function(){saveNum(9);});
-  document.getElementById("0").addEventListener("click", function(){saveNum(0);});
-}
-
-// Clear the screen
-document.getElementById("clear").addEventListener("click", function(){clear();});
-
-init();

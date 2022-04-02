@@ -10,34 +10,37 @@
 <body>
   <div id="container">
     <header>
-      <h1>Basic Calculator</h1>
+      <h1>Calculator</h1>
     </header>
     <br>
 
     <div id="line1">
-      <p id="display"></p>
-      <button id="clear" style="margin-right: 0;">AC</button>
+      <div id="display">
+        <div class="previousNumber"></div>
+        <div class="currentNumber">0</div>
+      </div>
+      <button class="clear" style="margin-right: 0;">AC</button>
     </div>
 
-    <button id="7">7</button>
-    <button id="8">8</button>
-    <button id="9">9</button>
-    <button id="divide">÷</button>
+    <button class="number">7</button>
+    <button class="number">8</button>
+    <button class="number">9</button>
+    <button class="operator">/</button>
     <br>
-    <button id="4">4</button>
-    <button id="5">5</button>
-    <button id="6">6</button>
-    <button id="multiply">x</button>
+    <button class="number">4</button>
+    <button class="number">5</button>
+    <button class="number">6</button>
+    <button class="operator">*</button>
     <br>
-    <button id="1">1</button>
-    <button id="2">2</button>
-    <button id="3">3</button>
-    <button id="substract">-</button>
+    <button class="number">1</button>
+    <button class="number">2</button>
+    <button class="number">3</button>
+    <button class="operator">-</button>
     <br>
-    <button id="decimal">.</button>
-    <button id="0">0</button>
-    <button id="equals">=</button>
-    <button id="add">+</button>
+    <button class="decimal">.</button>
+    <button class="number">0</button>
+    <button class="equal">=</button>
+    <button class="operator">+</button>
   </div>
 
   <script src="script.js"></script>
